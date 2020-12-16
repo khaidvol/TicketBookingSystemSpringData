@@ -1,0 +1,17 @@
+<html xmlns:th="https://www.thymeleaf.org">
+<body>
+<div>
+    <form method="POST" action="/file/uploadFile" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <td><label path="file">Select a file to upload</label></td>
+                <td><input type="file" name="file"/></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Submit"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
