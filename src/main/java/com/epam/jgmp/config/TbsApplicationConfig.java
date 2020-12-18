@@ -1,8 +1,8 @@
 package com.epam.jgmp.config;
 
-import com.epam.jgmp.xml.ObjXMLMapper;
-import com.epam.jgmp.xml.XMLTicket;
-import com.epam.jgmp.xml.XMLTicketListContainer;
+import com.epam.jgmp.service.xml.ObjXMLMapper;
+import com.epam.jgmp.service.xml.XMLTicket;
+import com.epam.jgmp.service.xml.XMLTicketListContainer;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,7 @@ import org.springframework.web.servlet.view.ResourceBundleViewResolver;
 @ComponentScan(basePackages = "com.epam.jgmp")
 @PropertySource("classpath:application.properties")
 @EnableWebMvc
-@EntityScan("com.epam.jgmp.model")
+@EntityScan("com.epam.jgmp.repository.model")
 @EnableJpaRepositories(basePackages = "com.epam.jgmp.repository")
 public class TbsApplicationConfig extends WebMvcConfigurationSupport {
 

@@ -1,9 +1,9 @@
 package com.epam.jgmp.facade;
 
-import com.epam.jgmp.model.Event;
-import com.epam.jgmp.model.Ticket;
-import com.epam.jgmp.model.User;
-import com.epam.jgmp.model.UserAccount;
+import com.epam.jgmp.repository.model.Event;
+import com.epam.jgmp.repository.model.Ticket;
+import com.epam.jgmp.repository.model.User;
+import com.epam.jgmp.repository.model.UserAccount;
 import com.epam.jgmp.service.EventService;
 import com.epam.jgmp.service.TicketService;
 import com.epam.jgmp.service.UserAccountService;
@@ -20,18 +20,18 @@ public class BookingFacadeImpl implements BookingFacade {
   private final UserService userService;
   private final EventService eventService;
   private final TicketService ticketService;
-  private final UserAccountService userAccountService;
+  private final UserAccountService accountService;
 
   // constructor-injection
   private BookingFacadeImpl(
       UserService userService,
       EventService eventService,
       TicketService ticketService,
-      UserAccountService userAccountService) {
+      UserAccountService accountService) {
     this.userService = userService;
     this.eventService = eventService;
     this.ticketService = ticketService;
-    this.userAccountService = userAccountService;
+    this.accountService = accountService;
   }
 
   @Override
@@ -115,42 +115,37 @@ public class BookingFacadeImpl implements BookingFacade {
   }
 
   @Override
-  public void preloadTickets() {
-    ticketService.preloadTickets();
-  }
-
-  @Override
   public List<Ticket> preloadTicketsFromFile(FileInputStream fileInputStream) {
     return ticketService.preloadTicketsFromFile(fileInputStream);
   }
 
   @Override
   public UserAccount getUserAccountById(long accountId) {
-    return userAccountService.getUserAccountById(accountId);
+    return accountService.getUserAccountById(accountId);
   }
 
   @Override
   public UserAccount getUserAccountByUserId(long userId) {
-    return userAccountService.getUserAccountByUserId(userId);
+    return accountService.getUserAccountByUserId(userId);
   }
 
   @Override
   public UserAccount createUserAccount(UserAccount userAccount) {
-    return userAccountService.createUserAccount(userAccount);
+    return accountService.createUserAccount(userAccount);
   }
 
   @Override
   public boolean deleteUserAccount(long accountId) {
-    return userAccountService.deleteUserAccount(accountId);
+    return accountService.deleteUserAccount(accountId);
   }
 
   @Override
   public boolean refillUserAccount(long accountId, double amount) {
-    return userAccountService.refillUserAccount(accountId, amount);
+    return accountService.refillUserAccount(accountId, amount);
   }
 
   @Override
   public boolean withdrawFromUserAccount(long accountId, double ticketPrice) {
-    return userAccountService.withdrawFromUserAccount(accountId, ticketPrice);
+    return accountService.withdrawFromUserAccount(accountId, ticketPrice);
   }
 }

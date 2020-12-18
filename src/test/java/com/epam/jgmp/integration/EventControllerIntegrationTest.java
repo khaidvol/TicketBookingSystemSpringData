@@ -1,12 +1,15 @@
 package com.epam.jgmp.integration;
 
 import com.epam.jgmp.facade.BookingFacade;
-import com.epam.jgmp.model.Event;
+import com.epam.jgmp.repository.model.Event;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -16,7 +19,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasToString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -31,8 +33,14 @@ public class EventControllerIntegrationTest {
   Event event;
   List<Event> events;
 
+  private ObjectMapper objectMapper;
+  private ObjectNode objectNode;
+
   @BeforeEach
   public void setUp() throws ParseException {
+
+    objectMapper = new ObjectMapper();
+    objectNode = objectMapper.createObjectNode();
 
     String title = "TestEvent";
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -47,7 +55,7 @@ public class EventControllerIntegrationTest {
   @Test
   void getEventById() throws Exception {
 
-    long id = 1L;
+    long id = event.getId();
 
     this.mockMvc
         .perform(get("/event/id?id={id}", id))
@@ -60,7 +68,7 @@ public class EventControllerIntegrationTest {
   @Test
   void getEventsByTitle() throws Exception {
 
-    String title = "Disco";
+    String title = event.getTitle();
 
     this.mockMvc
         .perform(get("/event/title?title={title}&pageSize=1&pageNum=1", title))
@@ -88,49 +96,42 @@ public class EventControllerIntegrationTest {
   @Test
   void createEvent() throws Exception {
 
-    String title = "Test1Event";
-    String day = "2020-12-12";
-    double price = 30.55;
+    objectNode.put("title", event.getTitle());
+    objectNode.put("date", event.getDate().toString());
+    objectNode.put("price", event.getTicketPrice());
 
     this.mockMvc
-        .perform(post("/event/new?title={title}&day={day}&price={price}", title, day, price))
+        .perform(
+            post("/event/new")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectNode.toString()))
         .andExpect(status().isOk())
-        .andExpect(view().name("eventTemplate"))
-        .andExpect(model().attributeExists("result"));
+        .andReturn();
   }
 
   @Test
   void updateEvent() throws Exception {
 
-    long id = event.getId();
-    String title = "Test2Event";
-    String day = "2020-12-12";
-    double price = 66.6;
+    objectNode.put("id", event.getId());
+    objectNode.put("title", "Test2Event");
+    objectNode.put("date", event.getDate().toString());
+    objectNode.put("price", event.getTicketPrice());
 
     this.mockMvc
         .perform(
-            put(
-                "/event/update?id={id}&title={title}&day={day}&price={price}",
-                id,
-                title,
-                day,
-                price))
+            put("/event/update/{id}", event.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectNode.toString()))
         .andExpect(status().isOk())
-        .andExpect(view().name("eventTemplate"))
-        .andExpect(model().attributeExists("result"));
+        .andReturn();
   }
 
   @Test
   void deleteEvent() throws Exception {
 
-    long id = event.getId();
-
     this.mockMvc
-        .perform(delete(String.format("/event/delete?id=%s", id)))
+        .perform(delete("/event/delete/{id}", event.getId()))
         .andExpect(status().isOk())
-        .andExpect(view().name("eventTemplate"))
-        .andExpect(model().attributeExists("result"))
-        .andExpect(
-            model().attribute("result", hasToString(String.format("Event #%s deleted: true", id))));
+        .andReturn();
   }
 }

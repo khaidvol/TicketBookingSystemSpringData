@@ -1,7 +1,9 @@
 package com.epam.jgmp.controller;
 
 import com.epam.jgmp.facade.BookingFacade;
-import com.epam.jgmp.model.User;
+import com.epam.jgmp.repository.model.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -9,12 +11,12 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasToString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -25,14 +27,21 @@ public class UserControllerTest {
   @MockBean private BookingFacade bookingFacade;
 
   private User user;
-  List<User> users;
+  private List<User> users;
+
+  private ObjectMapper objectMapper;
+  private ObjectNode objectNode;
 
   @BeforeEach
   public void setUp() {
 
+    objectMapper = new ObjectMapper();
+    objectNode = objectMapper.createObjectNode();
+
     long id = 1L;
     String name = "TestUser";
     String email = "test@gmail.com";
+
     user = new User(name, email);
     user.setId(id);
     users = Collections.singletonList(user);
@@ -47,11 +56,8 @@ public class UserControllerTest {
 
   @Test
   void getUserById() throws Exception {
-
-    long id = 1L;
-
     this.mockMvc
-        .perform(get("/user/id?id={id}", id))
+        .perform(get("/user/id?id={id}", user.getId()))
         .andExpect(status().isOk())
         .andExpect(view().name("userTemplate"))
         .andExpect(model().attributeExists("result"))
@@ -60,11 +66,8 @@ public class UserControllerTest {
 
   @Test
   void getUserByEmail() throws Exception {
-
-    String email = "test@gmail.com";
-
     this.mockMvc
-        .perform(get("/user/email?email={email}", email))
+        .perform(get("/user/email?email={email}", user.getEmail()))
         .andExpect(status().isOk())
         .andExpect(view().name("userTemplate"))
         .andExpect(model().attributeExists("result"))
@@ -73,11 +76,8 @@ public class UserControllerTest {
 
   @Test
   void getUsersByName() throws Exception {
-
-    String name = "TestUser";
-
     this.mockMvc
-        .perform(get("/user/name?name={name}&pageSize=1&pageNum=1", name))
+        .perform(get("/user/name?name={name}&pageSize=1&pageNum=1", user.getName()))
         .andExpect(status().isOk())
         .andExpect(view().name("userTemplate"))
         .andExpect(model().attributeExists("result"))
@@ -87,43 +87,39 @@ public class UserControllerTest {
   @Test
   void createUser() throws Exception {
 
-    String name = "TestUser";
-    String email = "test@gmail.com";
+    objectNode.put("name", user.getName());
+    objectNode.put("email", user.getEmail());
 
     this.mockMvc
-        .perform(post("/user/new?name={name}&email={email}", name, email))
+        .perform(
+            post("/user/new")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectNode.toString()))
         .andExpect(status().isOk())
-        .andExpect(view().name("userTemplate"))
-        .andExpect(model().attributeExists("result"))
-        .andExpect(model().attribute("result", "User created: ".concat(user.toString())));
+        .andReturn();
   }
 
   @Test
   void updateUser() throws Exception {
 
-    long id = 1L;
-    String name = "TestUser";
-    String email = "test@gmail.com";
+    objectNode.put("id", user.getId());
+    objectNode.put("name", user.getName());
+    objectNode.put("email", user.getEmail());
 
     this.mockMvc
-        .perform(put("/user/update?id={id}&name={name}&email={email}", id, name, email))
+        .perform(
+            put("/user/update/{id}", user.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectNode.toString()))
         .andExpect(status().isOk())
-        .andExpect(view().name("userTemplate"))
-        .andExpect(model().attributeExists("result"))
-        .andExpect(model().attribute("result", "User updated: ".concat(user.toString())));
+        .andReturn();
   }
 
   @Test
   void deleteUser() throws Exception {
-
-    Long id = 1L;
-
     this.mockMvc
-        .perform(delete(String.format("/user/delete?id=%s", id)))
+        .perform(delete("/user/delete/{id}", user.getId()))
         .andExpect(status().isOk())
-        .andExpect(view().name("userTemplate"))
-        .andExpect(model().attributeExists("result"))
-        .andExpect(
-            model().attribute("result", hasToString(String.format("User #%s deleted: true", id))));
+        .andReturn();
   }
 }

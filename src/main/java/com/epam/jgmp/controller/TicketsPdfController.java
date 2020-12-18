@@ -1,8 +1,8 @@
 package com.epam.jgmp.controller;
 
 import com.epam.jgmp.facade.BookingFacade;
-import com.epam.jgmp.model.Ticket;
-import com.epam.jgmp.model.User;
+import com.epam.jgmp.repository.model.Ticket;
+import com.epam.jgmp.repository.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +17,7 @@ public class TicketsPdfController {
 
   public static final String PDF_VIEW = "pdfView";
   public static final String TICKETS = "tickets";
-  private BookingFacade bookingFacade;
+  private final BookingFacade bookingFacade;
 
   public TicketsPdfController(BookingFacade bookingFacade) {
     this.bookingFacade = bookingFacade;

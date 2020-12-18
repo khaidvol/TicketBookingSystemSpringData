@@ -1,4 +1,4 @@
-package com.epam.jgmp.pdf;
+package com.epam.jgmp.service;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;

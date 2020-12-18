@@ -11,4 +11,9 @@ public class ApplicationExceptionHandler {
   public ResponseEntity handleApplicationException(ApplicationException e) {
     return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
   }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity uploadFailed(Exception exc) {
+    return ResponseEntity.unprocessableEntity().build();
+  }
 }

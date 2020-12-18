@@ -1,6 +1,6 @@
 package com.epam.jgmp.repository;
 
-import com.epam.jgmp.model.User;
+import com.epam.jgmp.repository.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

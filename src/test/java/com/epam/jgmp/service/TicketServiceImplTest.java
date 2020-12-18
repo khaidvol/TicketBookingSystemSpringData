@@ -1,10 +1,13 @@
 package com.epam.jgmp.service;
 
 import com.epam.jgmp.exception.ApplicationException;
-import com.epam.jgmp.model.Event;
-import com.epam.jgmp.model.Ticket;
-import com.epam.jgmp.model.User;
-import com.epam.jgmp.model.UserAccount;
+import com.epam.jgmp.repository.model.Event;
+import com.epam.jgmp.repository.model.Ticket;
+import com.epam.jgmp.repository.model.User;
+import com.epam.jgmp.repository.model.UserAccount;
+import com.epam.jgmp.service.implementation.EventServiceImpl;
+import com.epam.jgmp.service.implementation.TicketServiceImpl;
+import com.epam.jgmp.service.implementation.UserAccountServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,11 +20,11 @@ import java.util.Date;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class TicketServiceTest {
+public class TicketServiceImplTest {
 
-  @Autowired private TicketService ticketService;
-  @Autowired private EventService eventService;
-  @Autowired private UserAccountService userAccountService;
+  @Autowired private TicketServiceImpl ticketService;
+  @Autowired private EventServiceImpl eventService;
+  @Autowired private UserAccountServiceImpl userAccountService;
 
   private Ticket ticket;
 

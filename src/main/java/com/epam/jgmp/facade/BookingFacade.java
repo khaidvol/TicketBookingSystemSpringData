@@ -1,9 +1,9 @@
 package com.epam.jgmp.facade;
 
-import com.epam.jgmp.model.Event;
-import com.epam.jgmp.model.Ticket;
-import com.epam.jgmp.model.User;
-import com.epam.jgmp.model.UserAccount;
+import com.epam.jgmp.repository.model.Event;
+import com.epam.jgmp.repository.model.Ticket;
+import com.epam.jgmp.repository.model.User;
+import com.epam.jgmp.repository.model.UserAccount;
 
 import java.io.FileInputStream;
 import java.util.Date;
@@ -154,9 +154,6 @@ public interface BookingFacade {
    * @return Flag whether anything has been canceled.
    */
   boolean cancelTicket(long ticketId);
-
-  /** Preload tickets from xml file. */
-  void preloadTickets();
 
   /** Preload tickets from xml file. */
   List<Ticket> preloadTicketsFromFile(FileInputStream fileInputStream);

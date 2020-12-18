@@ -1,4 +1,4 @@
-package com.epam.jgmp.model;
+package com.epam.jgmp.repository.model;
 
 import javax.persistence.*;
 
@@ -8,21 +8,15 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "Ticket")
 public class Ticket {
 
-  public enum Category {
-    STANDARD,
-    PREMIUM,
-    BAR
-  }
-
   @Id
   @GeneratedValue(strategy = IDENTITY)
   @Column(name = "ID")
   private long id;
 
-  @Column(name = "EVENT_ID")
+  @Column(name = "USER_ID")
   private long userId;
 
-  @Column(name = "USER_ID")
+  @Column(name = "EVENT_ID")
   private long eventId;
 
   @Column(name = "PLACE")
@@ -117,5 +111,11 @@ public class Ticket {
     result = 31 * result + place;
     result = 31 * result + (category != null ? category.hashCode() : 0);
     return result;
+  }
+
+  public enum Category {
+    STANDARD,
+    PREMIUM,
+    BAR
   }
 }

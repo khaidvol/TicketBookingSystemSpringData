@@ -1,7 +1,8 @@
 package com.epam.jgmp.service;
 
 import com.epam.jgmp.exception.ApplicationException;
-import com.epam.jgmp.model.UserAccount;
+import com.epam.jgmp.repository.model.UserAccount;
+import com.epam.jgmp.service.implementation.UserAccountServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,9 +12,10 @@ import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class UserAccountServiceTest {
+public class UserAccountServiceImplTest {
 
-  @Autowired UserAccountService userAccountService;
+  @Autowired
+  UserAccountServiceImpl userAccountService;
   UserAccount userAccount;
 
   @BeforeEach

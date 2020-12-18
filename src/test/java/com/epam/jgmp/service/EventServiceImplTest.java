@@ -1,7 +1,7 @@
 package com.epam.jgmp.service;
 
 import com.epam.jgmp.exception.ApplicationException;
-import com.epam.jgmp.model.Event;
+import com.epam.jgmp.repository.model.Event;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class EventServiceTest {
+public class EventServiceImplTest {
 
   public static final String TEST_EVENT = "Test Event";
   public static final String TEST_EVENT_2 = "Test Event_2";

@@ -1,6 +1,6 @@
-package com.epam.jgmp.pdf;
+package com.epam.jgmp.service.pdf;
 
-import com.epam.jgmp.model.Ticket;
+import com.epam.jgmp.repository.model.Ticket;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.junit.jupiter.api.Assertions;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class TicketsPdfBuilderTest {
 
   @Autowired TicketsPdfBuilder ticketsPdfBuilder;

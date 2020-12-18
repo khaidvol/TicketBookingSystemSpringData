@@ -1,12 +1,11 @@
 package com.epam.jgmp.integration;
 
 import com.epam.jgmp.facade.BookingFacade;
-import com.epam.jgmp.model.Event;
-import com.epam.jgmp.model.Ticket;
-import com.epam.jgmp.model.User;
-import com.epam.jgmp.model.UserAccount;
+import com.epam.jgmp.repository.model.Event;
+import com.epam.jgmp.repository.model.Ticket;
+import com.epam.jgmp.repository.model.User;
+import com.epam.jgmp.repository.model.UserAccount;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,16 +15,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.epam.jgmp.model.Ticket.Category.*;
+import static com.epam.jgmp.repository.model.Ticket.Category.*;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class IntegrationTest {
 
   @Autowired BookingFacade bookingFacade;
-
-  @BeforeEach
-  public void setUp() {}
 
   @Test
   void testIntegrationScenario() {

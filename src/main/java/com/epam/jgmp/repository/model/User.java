@@ -1,4 +1,4 @@
-package com.epam.jgmp.model;
+package com.epam.jgmp.repository.model;
 
 import javax.persistence.*;
 

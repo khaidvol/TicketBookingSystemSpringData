@@ -1,43 +1,36 @@
 package com.epam.jgmp.controller;
 
+import com.epam.jgmp.controller.dto.TicketDTO;
 import com.epam.jgmp.facade.BookingFacade;
-import com.epam.jgmp.model.Event;
-import com.epam.jgmp.model.Ticket;
-import com.epam.jgmp.model.User;
+import com.epam.jgmp.repository.model.Event;
+import com.epam.jgmp.repository.model.Ticket;
+import com.epam.jgmp.repository.model.User;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Date;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/ticket")
 public class TicketController {
 
   public static final String RESULT = "result";
   public static final String TICKET_TEMPLATE = "ticketTemplate";
-  private BookingFacade bookingFacade;
+  private final BookingFacade bookingFacade;
 
   public TicketController(BookingFacade bookingFacade) {
     this.bookingFacade = bookingFacade;
   }
 
   @PostMapping("/book")
-  public ModelAndView bookTicket(
-      @RequestParam(value = "userId") Long userId,
-      @RequestParam(value = "eventId") Long eventId,
-      @RequestParam(value = "place") int place,
-      @RequestParam(value = "category") Ticket.Category category) {
+  public Ticket bookTicket(@RequestBody TicketDTO ticketDTO) {
 
-    Ticket ticket = bookingFacade.bookTicket(userId, eventId, place, category);
-
-    ModelAndView modelAndView = new ModelAndView(TICKET_TEMPLATE);
-    modelAndView.addObject(RESULT, ticket);
-
-    return modelAndView;
+    return bookingFacade.bookTicket(
+        ticketDTO.getUserId(), ticketDTO.getEventId(), ticketDTO.getPlace(), ticketDTO.getCategory());
   }
 
   @GetMapping("/userTickets")
@@ -48,13 +41,10 @@ public class TicketController {
       @RequestParam(value = "pageSize") int pageSize,
       @RequestParam(value = "pageNum") int pageNum) {
 
-    com.epam.jgmp.model.User user = new User(id, name, email);
+    User user = new User(id, name, email);
     List<Ticket> tickets = bookingFacade.getBookedTickets(user, pageSize, pageNum);
 
-    ModelAndView modelAndView = new ModelAndView(TICKET_TEMPLATE);
-    modelAndView.addObject(RESULT, tickets);
-
-    return modelAndView;
+    return new ModelAndView(TICKET_TEMPLATE, RESULT, tickets);
   }
 
   @GetMapping("/eventTickets")
@@ -69,26 +59,16 @@ public class TicketController {
     Event event = new Event(id, title, day, price);
     List<Ticket> tickets = bookingFacade.getBookedTickets(event, pageSize, pageNum);
 
-    ModelAndView modelAndView = new ModelAndView(TICKET_TEMPLATE);
-    modelAndView.addObject(RESULT, tickets);
-
-    return modelAndView;
+    return new ModelAndView(TICKET_TEMPLATE, RESULT, tickets);
   }
 
-  @DeleteMapping("/cancel")
-  public String cancelTicket(@RequestParam(value = "id") Long id, Model model) {
+  @DeleteMapping("/cancel/{id}")
+  public ResponseEntity<Long> cancelTicket(@PathVariable Long id) {
 
-    Boolean deleteResult = bookingFacade.cancelTicket(id);
-    model.addAttribute(RESULT, String.format("Ticket #%s canceled: %s", id, deleteResult));
-
-    return TICKET_TEMPLATE;
-  }
-
-  @GetMapping("/preload")
-  public String preloadTicket(Model model) {
-
-    bookingFacade.preloadTickets();
-    model.addAttribute(RESULT, "Tickets preloaded");
-    return TICKET_TEMPLATE;
+    boolean isCanceled = bookingFacade.cancelTicket(id);
+    if (!isCanceled) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(id, HttpStatus.OK);
   }
 }

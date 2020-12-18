@@ -1,6 +1,6 @@
 package com.epam.jgmp.repository;
 
-import com.epam.jgmp.model.Event;
+import com.epam.jgmp.repository.model.Event;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

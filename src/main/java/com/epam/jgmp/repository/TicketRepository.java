@@ -1,6 +1,6 @@
 package com.epam.jgmp.repository;
 
-import com.epam.jgmp.model.Ticket;
+import com.epam.jgmp.repository.model.Ticket;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

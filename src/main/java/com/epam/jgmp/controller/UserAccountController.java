@@ -1,7 +1,8 @@
 package com.epam.jgmp.controller;
 
+import com.epam.jgmp.controller.dto.UserAccountDTO;
 import com.epam.jgmp.facade.BookingFacade;
-import com.epam.jgmp.model.UserAccount;
+import com.epam.jgmp.repository.model.UserAccount;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/account")
 public class UserAccountController {
 
-  private BookingFacade bookingFacade;
+  private final BookingFacade bookingFacade;
 
   public UserAccountController(BookingFacade bookingFacade) {
     this.bookingFacade = bookingFacade;
@@ -33,27 +34,28 @@ public class UserAccountController {
   }
 
   @PostMapping("/create")
-  public ResponseEntity<UserAccount> createUserAccount(
-      @RequestParam("userId") long userId, @RequestParam("money") double money) {
+  public UserAccount createUserAccount(@RequestBody UserAccountDTO userAccountDTO) {
 
-    UserAccount userAccount = bookingFacade.createUserAccount(new UserAccount(userId, money));
+    UserAccount userAccount = new UserAccount(userAccountDTO.getUserId(), userAccountDTO.getMoney());
 
-    return new ResponseEntity<>(userAccount, HttpStatus.OK);
+    return bookingFacade.createUserAccount(userAccount);
   }
 
-  @DeleteMapping("/delete")
-  public ResponseEntity<Boolean> deleteUserAccount(@RequestParam("userId") long accountId) {
+  @DeleteMapping("/delete/{id}")
+  public ResponseEntity<Long> deleteAccount(@PathVariable Long id) {
 
-    boolean result = bookingFacade.deleteUserAccount(accountId);
-
-    return new ResponseEntity<>(result, HttpStatus.OK);
+    boolean isDeleted = bookingFacade.deleteUserAccount(id);
+    if (!isDeleted) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(id, HttpStatus.OK);
   }
 
-  @PutMapping("/refill")
+  @PutMapping("/refill/{id}")
   public ResponseEntity<Boolean> refillUserAccount(
-      @RequestParam("accountId") long accountId, @RequestParam("amount") double amount) {
+          @RequestBody UserAccountDTO userAccountDTO, @PathVariable Long id) {
 
-    boolean result = bookingFacade.refillUserAccount(accountId, amount);
+    boolean result = bookingFacade.refillUserAccount(userAccountDTO.getUserId(), userAccountDTO.getMoney());
 
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
