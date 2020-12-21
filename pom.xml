@@ -139,9 +139,11 @@
 			<version>1.18.12</version>
 			<scope>provided</scope>
 		</dependency>
-
-
-
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-ehcache</artifactId>
+			<version>5.4.25.Final</version>
+		</dependency>
 	</dependencies>
 
 	<build>

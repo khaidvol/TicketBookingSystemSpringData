@@ -1,11 +1,14 @@
 package com.epam.jgmp.repository.model;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "User")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User {
 
   @Id

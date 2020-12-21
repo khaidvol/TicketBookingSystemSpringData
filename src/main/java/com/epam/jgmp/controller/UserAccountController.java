@@ -36,7 +36,8 @@ public class UserAccountController {
   @PostMapping("/create")
   public UserAccount createUserAccount(@RequestBody UserAccountDTO userAccountDTO) {
 
-    UserAccount userAccount = new UserAccount(userAccountDTO.getUserId(), userAccountDTO.getMoney());
+    UserAccount userAccount =
+        new UserAccount(userAccountDTO.getUserId(), userAccountDTO.getMoney());
 
     return bookingFacade.createUserAccount(userAccount);
   }
@@ -53,9 +54,10 @@ public class UserAccountController {
 
   @PutMapping("/refill/{id}")
   public ResponseEntity<Boolean> refillUserAccount(
-          @RequestBody UserAccountDTO userAccountDTO, @PathVariable Long id) {
+      @RequestBody UserAccountDTO userAccountDTO, @PathVariable Long id) {
 
-    boolean result = bookingFacade.refillUserAccount(userAccountDTO.getUserId(), userAccountDTO.getMoney());
+    boolean result =
+        bookingFacade.refillUserAccount(userAccountDTO.getUserId(), userAccountDTO.getMoney());
 
     return new ResponseEntity<>(result, HttpStatus.OK);
   }

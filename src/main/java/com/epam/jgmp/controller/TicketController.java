@@ -30,7 +30,10 @@ public class TicketController {
   public Ticket bookTicket(@RequestBody TicketDTO ticketDTO) {
 
     return bookingFacade.bookTicket(
-        ticketDTO.getUserId(), ticketDTO.getEventId(), ticketDTO.getPlace(), ticketDTO.getCategory());
+        ticketDTO.getUserId(),
+        ticketDTO.getEventId(),
+        ticketDTO.getPlace(),
+        ticketDTO.getCategory());
   }
 
   @GetMapping("/userTickets")
